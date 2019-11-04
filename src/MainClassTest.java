@@ -6,18 +6,21 @@ import org.junit.Test;
 public class MainClassTest {
 
     MainClass Main = new MainClass();
-    private int resultExpected;
+    private int resultLocalExpected = 14;
+    private int resultClassLimit = 45;
 
-    @Before
-    public void setResultExpected(){
-        resultExpected = 14;
+    @Test
+    public void testGetLocalNumber() {
+        Assert.assertTrue(
+                "getLocalNumber returns " + Main.getLocalNumber() + ", expected " + resultLocalExpected,
+                Main.getLocalNumber() == resultLocalExpected);
     }
 
     @Test
-    public void getLocalNumberTest() {
+    public void testGetClassNumber() {
         Assert.assertTrue(
-                "getLocalNumber returns " + Main.getLocalNumber() + " instead of " + resultExpected,
-                Main.getLocalNumber() == resultExpected);
+                "getClassNumber returns " + Main.getClassNumber() + ", expected value greater than " + resultClassLimit,
+                Main.getClassNumber() > resultClassLimit);
     }
 
 }
