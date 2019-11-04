@@ -8,6 +8,7 @@ public class MainClassTest {
     MainClass Main = new MainClass();
     private int resultLocalExpected = 14;
     private int resultClassLimit = 45;
+    private String resultStringExpected = "hello".toLowerCase();
 
     @Test
     public void testGetLocalNumber() {
@@ -22,5 +23,13 @@ public class MainClassTest {
                 "getClassNumber returns " + Main.getClassNumber() + ", expected value greater than " + resultClassLimit,
                 Main.getClassNumber() > resultClassLimit);
     }
+
+    @Test
+    public void testGetClassString(){
+        Assert.assertTrue(
+                "containsIgnoreCase returns " + Main.getClassString() + " without " + resultStringExpected,
+                Helper.containsIgnoreCase(Main.getClassString(),resultStringExpected));
+    }
+
 
 }
