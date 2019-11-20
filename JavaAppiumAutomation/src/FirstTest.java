@@ -19,6 +19,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.net.URL;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
+import java.util.List;
 
 public class FirstTest {
 
@@ -27,6 +28,7 @@ public class FirstTest {
     private String searchToolbarByXpath = "//*[contains(@text, 'Wikipedia')]";
     private String searchInputFieldById = "org.wikipedia:id/search_src_text";
     private String searchResultListById = "org.wikipedia:id/search_results_list";
+    private String searchResultElementsById = "org.wikipedia:id/page_list_item_container";
     private String searchCloseBtnById = "org.wikipedia:id/search_close_btn";
     private int defaultTimeout = 5;
 
@@ -50,11 +52,39 @@ public class FirstTest {
     public void searchPromptTest(){
 
         waitForElementAndClick(By.xpath(searchToolbarByXpath));
-        WebElement element = waitForElementPresenceBy(By.id(searchInputFieldById));
-        String searchPrompt = getTextFrom(element);
+        WebElement searchInput = waitForElementPresenceBy(By.id(searchInputFieldById));
+        String searchPrompt = getTextFrom(searchInput);
         Assert.assertEquals("Search…", searchPrompt);
 
     }
+
+
+//    @Test
+//    public void cancelSearchTest() {
+//
+//        waitForElementAndClick(By.xpath(searchToolbarByXpath));
+//        WebElement searchInput = waitForElementPresenceBy(By.id(searchInputFieldById));
+//        searchInput.sendKeys("Appium");
+//        List<WebElement> result = waitForElementsPresenceBy(By.id(searchResultElementsById));
+//        Assert.assertTrue(searchResultElementsById + " is empty", result.size() > 0);
+//        waitForElementAndClick(By.id(searchCloseBtnById));
+//        Assert.assertTrue(waitForElementInvisibilityBy(By.id(searchResultElementsById)));
+//
+//    }
+
+    @Test
+    public void cancelSearchTest() {
+
+        waitForElementAndClick(By.xpath(searchToolbarByXpath));
+        WebElement searchInput = waitForElementPresenceBy(By.id(searchInputFieldById));
+        searchInput.sendKeys("Appium");
+        waitForElementPresenceBy(By.id(searchResultListById));
+        waitForElementAndClick(By.id(searchCloseBtnById));
+        Assert.assertTrue(waitForElementInvisibilityBy(By.id(searchResultListById)));
+
+    }
+
+
 
     @After
     public void tearDown(){
@@ -69,8 +99,32 @@ public class FirstTest {
         );
     }
 
+    private List<WebElement> waitForElementsPresenceBy(By by, String errorMessage, long timeoutInSeconds){
+        WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
+        wait.withMessage(errorMessage + '\n');
+        return wait.until(
+                ExpectedConditions.presenceOfAllElementsLocatedBy(by)
+        );
+    }
+
+    private Boolean waitForElementInvisibilityBy(By by, String errorMessage, long timeoutInSeconds){
+        WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
+        wait.withMessage(errorMessage + '\n');
+        return wait.until(
+                ExpectedConditions.invisibilityOfElementLocated(by)
+        );
+    }
+
     private WebElement waitForElementPresenceBy(By by) {
         return waitForElementPresenceBy(by, "Cannot find " + by, defaultTimeout);
+    }
+
+    private List<WebElement> waitForElementsPresenceBy(By by) {
+        return waitForElementsPresenceBy(by, "Cannot find " + by, defaultTimeout);
+    }
+
+    private Boolean waitForElementInvisibilityBy(By by){
+        return waitForElementInvisibilityBy(by, "Founded elements " + by, defaultTimeout);
     }
 
     private WebElement waitForElementAndClick(By by) {
