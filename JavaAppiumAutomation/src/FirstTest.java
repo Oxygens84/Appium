@@ -26,6 +26,8 @@ public class FirstTest {
 
     private String searchToolbarByXpath = "//*[contains(@text, 'Wikipedia')]";
     private String searchInputFieldById = "org.wikipedia:id/search_src_text";
+    private String searchResultListById = "org.wikipedia:id/search_results_list";
+    private String searchCloseBtnById = "org.wikipedia:id/search_close_btn";
     private int defaultTimeout = 5;
 
     @Before
@@ -47,8 +49,8 @@ public class FirstTest {
     @Test
     public void searchPromptTest(){
 
-        waitForElementByXpathAndClick(searchToolbarByXpath);
-        WebElement element = waitForElementPresenceById(searchInputFieldById);
+        waitForElementAndClick(By.xpath(searchToolbarByXpath));
+        WebElement element = waitForElementPresenceBy(By.id(searchInputFieldById));
         String searchPrompt = getTextFrom(element);
         Assert.assertEquals("Search…", searchPrompt);
 
@@ -59,34 +61,20 @@ public class FirstTest {
         driver.quit();
     }
 
-    private WebElement waitForElementPresenceByXpath(String xpath, String errorMessage, long timeoutInSeconds){
+    private WebElement waitForElementPresenceBy(By by, String errorMessage, long timeoutInSeconds){
         WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
         wait.withMessage(errorMessage + '\n');
-        By by = By.xpath(xpath);
         return wait.until(
                 ExpectedConditions.presenceOfElementLocated(by)
         );
     }
 
-    private WebElement waitForElementPresenceById(String id, String errorMessage, long timeoutInSeconds){
-        WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
-        wait.withMessage(errorMessage + '\n');
-        By by = By.id(id);
-        return wait.until(
-                ExpectedConditions.presenceOfElementLocated(by)
-        );
+    private WebElement waitForElementPresenceBy(By by) {
+        return waitForElementPresenceBy(by, "Cannot find " + by, defaultTimeout);
     }
 
-    private WebElement waitForElementPresenceByXpath(String xpath){
-        return waitForElementPresenceByXpath(xpath, "Cannot find " + xpath, defaultTimeout);
-    }
-
-    private WebElement waitForElementPresenceById(String id){
-        return waitForElementPresenceById(id, "Cannot find " + id, defaultTimeout);
-    }
-
-    private WebElement waitForElementByXpathAndClick(String xpath){
-        WebElement element = waitForElementPresenceByXpath(xpath);
+    private WebElement waitForElementAndClick(By by) {
+        WebElement element = waitForElementPresenceBy(by);
         element.click();
         return element;
     }
