@@ -155,16 +155,52 @@ public class FirstTest {
 
     }
 
-    @Test
-    public void assertElementPresentTest(){
+
+    //@Test
+    public void saveTwoArticlesAndDeleteOneTest(){
 
         String title = "Test Folder " + getCurrentDate();
 
+        String firstSearch= "Java";
+        waitForElementAndClick(By.xpath(searchToolbarByXpath), "Error. Step (first article) - find Search toolbar");
+        waitForElementAndSetText(By.id(searchInputFieldById), firstSearch, "Error. Step (first article) - set a search parameter " + firstSearch);
+        waitForElementAndClick(By.xpath(searchJavaArticleByXpath), "Error. Step (first article) - find an article by " + searchJavaArticleByXpath);
+        waitForElementAndClick(By.xpath(searchOptionsBtnByXpath), "Error. Step (first article) - find Options button for article");
+        waitForElementAndClick(By.xpath(searchAddArticleToListOption), "Error. Step (first article) - find Option - Add article to reading list");
+        waitForElementAndClick(By.id(searchOnboardingBtnById), "Error. Step (first article) - click 'Got it' tip overlay");
+        waitForElementAndSetText(By.id(searchInputTitleForSavingById), title, "Error. Step (first article) - find and set a Title for my list folder with title " + title);
+        waitForElementAndClick(By.xpath(searchOkBtneByXpath), "Error. Step (first article) - click OK button for the folder creating");
+        waitForElementAndClick(By.xpath(searchNavigateUpBtnByXpath), "Error. Step (first article) - click X button");
+
+        String secondSearch= "Appium";
+        waitForElementAndClick(By.xpath(searchToolbarByXpath), "Error. Step (second article) - find Search toolbar");
+        waitForElementAndSetText(By.id(searchInputFieldById), secondSearch, "Error. Step (second article) - set a search parameter " + secondSearch);
+        waitForElementAndClick(By.xpath(searchAppiumArticleByXpath), "Error. Step (second article) - find an article by " + searchAppiumArticleByXpath);
+        waitForElementAndClick(By.xpath(searchOptionsBtnByXpath), "Error. Step (second article) - find Options button for article");
+        waitForElementAndClick(By.xpath(searchAddArticleToListOption), "Error. Step (second article) - find Option - Add article to reading list");
+        waitForElementAndClick(By.xpath("//android.widget.TextView[contains(@text,'" + title + "')]"), "Error. Step (second article) - find created folder with title " + title);
+        waitForElementAndClick(By.xpath(searchNavigateUpBtnByXpath), "Error. Step (second article) - click X button");
+
+        waitForElementAndClick(By.xpath(searchMyListsOptionByXpath), "Error. Step - find My lists in navigation bar");
+        waitForElementAndClick(By.xpath("//android.widget.TextView[contains(@text,'" + title + "')]"), "Error. Step - find created folder in my lists");
+        waitForElementPresenceBy(By.xpath(searchJavaArticleByXpath), "Error. Step - find saved article in the list by " + searchJavaArticleByXpath);
+        swipeLeftforElement(By.xpath(searchJavaArticleByXpath), "Error. Step - delete article from my list");
+        waitForElementInvisibilityBy(By.xpath(searchJavaArticleByXpath), "Error. Step - check invisibility deleted article");
+        waitForElementPresenceBy(By.xpath(searchAppiumArticleByXpath), "Error. Step - find saved article in the list by " + searchAppiumArticleByXpath);
+
+        waitForElementAndClick(By.xpath(searchAppiumArticleByXpath), "Error. Step - find an article by " + searchAppiumArticleByXpath);
+        String titleSecondArticle = waitForElementAndGetAttribute(By.id(searchArticleTitleById), "text", "Error. Step - get the title last article in the list");
+        Assert.assertEquals("Title of the last article in the list differs from expected", secondSearch, titleSecondArticle);
+
+    }
+
+    //@Test
+    public void assertElementPresentTest(){
         String articleSearch = "Java";
         waitForElementAndClick(By.xpath(searchToolbarByXpath), "Error. Step - find Search toolbar");
         waitForElementAndSetText(By.id(searchInputFieldById), articleSearch, "Error. Step - set a search parameter " + articleSearch);
         waitForElementAndClick(By.xpath(searchJavaArticleByXpath), "Error. Step (first article) - find an article by " + searchJavaArticleByXpath);
-        assertElementPresent(By.id(searchArticleTitleById), "text", "Error. Step - assert if the title presents");
+        assertElementPresent(By.id(searchArticleTitleById), "text", "Error. Step - assert for title presents check");
     }
 
     @After
