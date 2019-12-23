@@ -7,8 +7,8 @@ import org.openqa.selenium.WebElement;
 public class ArticlePageObject extends MainPageObject {
 
     private static final String
-            ARTICLE_TITLE = "org.wikipedia:id/view_page_title_text",
-            FOOTER_ELEMENT = "//*[@text='View page in browser']";
+            ARTICLE_TITLE = "id:org.wikipedia:id/view_page_title_text",
+            FOOTER_ELEMENT = "xpath://*[@text='View page in browser']";
 
     private static final Integer MAX_SWIPE = 5;
 
@@ -17,7 +17,7 @@ public class ArticlePageObject extends MainPageObject {
     }
 
     public WebElement waitForArticleTitle(){
-        return this.waitForElementPresenceBy(By.id(ARTICLE_TITLE), "Article Page: cannot find article's title");
+        return this.waitForElementPresenceBy(ARTICLE_TITLE, "Article Page: cannot find article's title");
     }
 
     public String getArticleTitle(){
@@ -26,7 +26,7 @@ public class ArticlePageObject extends MainPageObject {
     }
 
     public void swipeToFooter(){
-        this.swipeUpToFindElement(By.xpath(FOOTER_ELEMENT), "Article Page: cannot find article's footer" , MAX_SWIPE);
+        this.swipeUpToFindElement(FOOTER_ELEMENT, "Article Page: cannot find article's footer" , MAX_SWIPE);
     }
 
 

@@ -13,6 +13,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class MainPageObject {
 
@@ -25,7 +26,8 @@ public class MainPageObject {
         this.driver = driver;
     }
 
-    public WebElement waitForElementPresenceBy(By by, String errorMessage, long timeoutInSeconds){
+    public WebElement waitForElementPresenceBy(String locator, String errorMessage, long timeoutInSeconds){
+        By by = this.getLocatorByString(locator);
         WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
         wait.withMessage(errorMessage + '\n');
         return wait.until(
@@ -33,7 +35,8 @@ public class MainPageObject {
         );
     }
 
-    public List<WebElement> waitForElementsPresenceBy(By by, String errorMessage, long timeoutInSeconds){
+    public List<WebElement> waitForElementsPresenceBy(String locator, String errorMessage, long timeoutInSeconds){
+        By by = this.getLocatorByString(locator);
         WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
         wait.withMessage(errorMessage + '\n');
         return wait.until(
@@ -41,7 +44,8 @@ public class MainPageObject {
         );
     }
 
-    public Boolean waitForElementInvisibilityBy(By by, String errorMessage, long timeoutInSeconds){
+    public Boolean waitForElementInvisibilityBy(String locator, String errorMessage, long timeoutInSeconds){
+        By by = this.getLocatorByString(locator);
         WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
         wait.withMessage(errorMessage + '\n');
         return wait.until(
@@ -49,37 +53,37 @@ public class MainPageObject {
         );
     }
 
-    public WebElement waitForElementPresenceBy(By by, String errorMessage) {
-        return waitForElementPresenceBy(by, errorMessage + "\nCannot find " + by, defaultTimeout);
+    public WebElement waitForElementPresenceBy(String locator, String errorMessage) {
+        return waitForElementPresenceBy(locator, errorMessage + "\nCannot find " + locator, defaultTimeout);
     }
 
-    public List<WebElement> waitForElementsPresenceBy(By by, String errorMessage) {
-        return waitForElementsPresenceBy(by, errorMessage + "\nCannot find " + by, defaultTimeout);
+    public List<WebElement> waitForElementsPresenceBy(String locator, String errorMessage) {
+        return waitForElementsPresenceBy(locator, errorMessage + "\nCannot find " + locator, defaultTimeout);
     }
 
-    public Boolean waitForElementInvisibilityBy(By by, String errorMessage){
-        return waitForElementInvisibilityBy(by, errorMessage + "\nFounded elements " + by, defaultTimeout);
+    public Boolean waitForElementInvisibilityBy(String locator, String errorMessage){
+        return waitForElementInvisibilityBy(locator, errorMessage + "\nFounded elements " + locator, defaultTimeout);
     }
 
-    public WebElement waitForElementAndClick(By by, String errorMessage) {
-        WebElement element = waitForElementPresenceBy(by, errorMessage);
+    public WebElement waitForElementAndClick(String locator, String errorMessage) {
+        WebElement element = waitForElementPresenceBy(locator, errorMessage);
         element.click();
         return element;
     }
 
-    public WebElement waitForElementAndSetText(By by, String text, String errorMessage){
-        WebElement element = waitForElementPresenceBy(by, errorMessage);
+    public WebElement waitForElementAndSetText(String locator, String text, String errorMessage){
+        WebElement element = waitForElementPresenceBy(locator, errorMessage);
         element.sendKeys(text);
         return element;
     }
 
-    public String waitForElementAndGetAttribute(By by, String attribute, String errorMessage){
-        WebElement element = waitForElementPresenceBy(by, errorMessage);
+    public String waitForElementAndGetAttribute(String locator, String attribute, String errorMessage){
+        WebElement element = waitForElementPresenceBy(locator, errorMessage);
         return element.getAttribute(attribute);
     }
 
-    public WebElement waitForElementAndClear(By by, String errorMessage) {
-        WebElement element = waitForElementPresenceBy(by, errorMessage);
+    public WebElement waitForElementAndClear(String locator, String errorMessage) {
+        WebElement element = waitForElementPresenceBy(locator, errorMessage);
         element.clear();
         return element;
     }
@@ -106,11 +110,12 @@ public class MainPageObject {
         swipeUp(defaultTimeOfSwipe);
     }
 
-    public void swipeUpToFindElement(By by, String errorMessage, int maxSwipes){
+    public void swipeUpToFindElement(String locator, String errorMessage, int maxSwipes){
+        By by = this.getLocatorByString(locator);
         int currentLoop = 0;
         while ( driver.findElements(by).size() == 0){
             if (currentLoop == maxSwipes) {
-                waitForElementPresenceBy(by, errorMessage + "\nCannot find " + by, defaultTimeout);
+                waitForElementPresenceBy(locator, errorMessage + "\nCannot find " + by, defaultTimeout);
                 return;
             }
             swipeUpQick();
@@ -118,8 +123,8 @@ public class MainPageObject {
         }
     }
 
-    public void swipeLeftforElement(By by, String errorMessage){
-        WebElement element = waitForElementPresenceBy(by, errorMessage);
+    public void swipeLeftforElement(String locator, String errorMessage){
+        WebElement element = waitForElementPresenceBy(locator, errorMessage);
         int left_x = element.getLocation().getX();
         int right_x = left_x + element.getSize().getWidth();
         int upper_y = element.getLocation().getY();
@@ -140,7 +145,8 @@ public class MainPageObject {
         return dateFormat.format(date);
     }
 
-    public int getAmountOfFoundedElements(By by){
+    public int getAmountOfFoundedElements(String locator){
+        By by = this.getLocatorByString(locator);
         List result = driver.findElements(by);
         return result.size();
     }
@@ -154,4 +160,17 @@ public class MainPageObject {
         }
     }
 
+    private By getLocatorByString(String locator_with_type){
+        String[] given_locator = locator_with_type.split(Pattern.quote(":"), 2);
+        String type = given_locator[0];
+        String locator = given_locator[1];
+        if (type.equals("xpath")) {
+            return By.xpath(locator);
+        } else if (type.equals("id")) {
+            return By.id(locator);
+        } else {
+            throw new IllegalArgumentException("Cannot get type of locator. Locator: " + locator_with_type);
+        }
+
+    }
 }
