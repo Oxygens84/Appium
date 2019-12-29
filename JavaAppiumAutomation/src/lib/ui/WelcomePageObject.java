@@ -5,12 +5,14 @@ import io.appium.java_client.AppiumDriver;
 public class WelcomePageObject extends MainPageObject {
 
     private static final String
-            STEP_LEARN_MORE_ABOUT_WIKI = "id:Learn more about Wikipedia",
-            STEP_NEW_WAY_TO_EXPLORE = "id:New ways to explore",
-            STEP_ADD_OR_EDIT_PREF_LANGUAGE = "id:Add or edit preferred lamguages",
-            STEP_LEARN_MORE_ABOUT_DATA_COLLECTED = "id:Learn more about data collected",
-            STEP_NEXT = "id:Next",
-            STEP_GET_STARTED = "id:Get started";
+            STEP_LEARN_MORE_ABOUT_WIKI = "xpath://XCUIElementTypeButton[@name='Learn more about Wikipedia']",
+            STEP_NEW_WAY_TO_EXPLORE = "xpath://XCUIElementTypeStaticText[@name='New ways to explore']",
+            STEP_ADD_OR_EDIT_PREF_LANGUAGE = "xpath://XCUIElementTypeButton[@name='Add or edit preferred languages']",
+            STEP_LEARN_MORE_ABOUT_DATA_COLLECTED = "xpath://XCUIElementTypeButton[@name='Learn more about data collected']",
+            STEP_NEXT = "xpath://XCUIElementTypeButton[@name='Next']",
+            STEP_GET_STARTED = "xpath://XCUIElementTypeButton[@name='Get started']",
+            STEP_SKIP = "xpath://XCUIElementTypeButton[@name='Skip']";
+
 
     public WelcomePageObject(AppiumDriver driver) {
         super(driver);
@@ -34,11 +36,14 @@ public class WelcomePageObject extends MainPageObject {
 
 
     public void clickNextButton(){
-        this.waitForElementPresenceBy(STEP_NEXT, "Welcome Page: cannot find Next");
+        this.waitForElementAndClick(STEP_NEXT, "Welcome Page: cannot find Next");
     }
 
     public void clickGetStartedButton(){
-        this.waitForElementPresenceBy(STEP_GET_STARTED, "Welcome Page: cannot find Get started Button");
+        this.waitForElementAndClick(STEP_GET_STARTED, "Welcome Page: cannot find Get started Button");
     }
 
+    public void clickSkip(){
+        this.waitForElementAndClick(STEP_SKIP, "Welcome Page: cannot find Skip Button");
+    }
 }

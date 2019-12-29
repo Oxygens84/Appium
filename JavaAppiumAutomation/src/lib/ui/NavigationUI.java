@@ -1,13 +1,12 @@
 package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
-import org.openqa.selenium.By;
 
-public class NavigationUI extends MainPageObject {
+abstract public class NavigationUI extends MainPageObject {
 
-    private static final String
-            BACK_TO_MAIN_PAGE = "xpath://android.widget.ImageButton[@content-desc='Navigate up']",
-            MY_LISTS_OPTION = "xpath://android.widget.FrameLayout[@content-desc='My lists']";
+    protected static String
+            BACK_TO_MAIN_PAGE,
+            MY_LISTS_OPTION;
 
     public NavigationUI(AppiumDriver driver) {
         super(driver);

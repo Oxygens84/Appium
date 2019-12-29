@@ -6,7 +6,7 @@ import org.junit.Test;
 public class SearchTests extends CoreTestCase {
 
     private static final String
-            SEARCH_TEXT_JAVA = "Java",
+            SEARCH_TEXT_JAVA = "Java (programming language)",
             SEARCH_TEXT_JAVA_RESULT = "oriented programming language";
 
     @Test
@@ -50,7 +50,6 @@ public class SearchTests extends CoreTestCase {
         SearchPageObject.typeSearchLine(searchText);
         SearchPageObject.waitForSearchResult(searchText);
         SearchPageObject.clickArticleWithSubstring(searchText);
-        ArticlePageObject.waitForArticleTitle();
         ArticlePageObject.swipeToFooter();
     }
 }

@@ -1,17 +1,19 @@
 package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
-import org.openqa.selenium.By;
+import lib.Platform;
+import org.junit.Assert;
 
-public class MyListPageObject extends MainPageObject {
+abstract public class MyListPageObject extends MainPageObject {
 
-    private static final String
-            ACTIONS_OPTION ="xpath://*[@content-desc='More options']",
-            ADD_ARTICLE = "xpath://*[@text='Add to reading list']",
-            ONBOARDING = "id:org.wikipedia:id/onboarding_button",
-            MY_LIST_FOLDER_TITLE = "id:org.wikipedia:id/text_input",
-            OK_BUTTON = "xpath://*[@text = 'OK']",
-            SEARCH_ELEMENT_BY_SUBSTRING_TPL = "xpath://*[contains(@text,'{SUBSTRING}')]";
+    protected static String
+            ACTIONS_OPTION,
+            ADD_ARTICLE,
+            ONBOARDING,
+            MY_LIST_FOLDER_TITLE,
+            OK_BUTTON,
+            SEARCH_ELEMENT_BY_SUBSTRING_TPL,
+            SEARCH_ELEMENTS;
 
     public MyListPageObject(AppiumDriver driver) {
         super(driver);
@@ -19,7 +21,7 @@ public class MyListPageObject extends MainPageObject {
 
     /* TEMPLATES METHOD */
     private static String getResultSearchElement(String substring){
-        return "xpath:" + SEARCH_ELEMENT_BY_SUBSTRING_TPL.replace("{SUBSTRING}", substring);
+        return SEARCH_ELEMENT_BY_SUBSTRING_TPL.replace("{SUBSTRING}", substring);
     }
     /* TEMPLATES METHOD */
 
@@ -48,10 +50,13 @@ public class MyListPageObject extends MainPageObject {
     }
 
     public void removeArticleFromMyList(String title){
-        waitArticleAppearInMyList(title);
+        this.waitArticleAppearInMyList(title);
         String searchResultXpath = getResultSearchElement(title);
         this.swipeLeftforElement(searchResultXpath, "My list Page: cannot delete article from my list");
-        waitArticleDisappearFromMyList(title);
+        if (Platform.getInstance().isIOS()) {
+            this.clickElementToRightUpperConner(searchResultXpath, "My list Page: cannot delete article from my list");
+        }
+        this.waitArticleDisappearFromMyList(title);
     }
 
     public void waitArticleAppearInMyList(String title){
@@ -64,4 +69,14 @@ public class MyListPageObject extends MainPageObject {
         this.waitForElementInvisibilityBy(searchResultXpath, "My list Page: article is still present in My list");
     }
 
+    public void addArticleToMySavedArticles(){
+        this.waitForElementAndClick(ADD_ARTICLE, "Article Page: cannot add article to my saved articles");
+    }
+
+    public void checkAmountOfElements(int expectedSize){
+        Assert.assertEquals(
+                "My list Page: amount of elements invalid",
+                expectedSize,
+                this.getAmountOfFoundedElements(SEARCH_ELEMENTS));
+    }
 }

@@ -1,18 +1,16 @@
 package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
-import org.junit.Assert;
-import org.openqa.selenium.By;
 
-public class SearchPageObject extends MainPageObject {
+abstract public class SearchPageObject extends MainPageObject {
 
-    private static final String
-        SEARCH_INIT_ELEMENT = "xpath://*[contains(@text, 'Wikipedia')]",
-        SEARCH_INPUT = "id:org.wikipedia:id/search_src_text",
-        SEARCH_RESULT_ELEMENTS = "id:org.wikipedia:id/page_list_item_container",
-        SEARCH_RESULT_BY_SUBSTRING_TPL = "xpath://*[@resource-id='org.wikipedia:id/page_list_item_container']//*[contains(@text,'{SUBSTRING}')]",
-        SEARCH_CANCEL_BUTTON = "id:org.wikipedia:id/search_close_btn",
-        SEARCH_EMPTY_RESULT = "xpath://*[@text='No results found']";
+    protected static String
+            SEARCH_INIT_ELEMENT,
+            SEARCH_INPUT,
+            SEARCH_RESULT_ELEMENTS,
+            SEARCH_RESULT_BY_SUBSTRING_TPL,
+            SEARCH_CANCEL_BUTTON,
+            SEARCH_EMPTY_RESULT;
 
     public SearchPageObject(AppiumDriver driver) {
         super(driver);
@@ -30,6 +28,7 @@ public class SearchPageObject extends MainPageObject {
     }
 
     public void typeSearchLine(String searchLine){
+        this.waitForElementAndClear(SEARCH_INPUT, "Search Page: cannot clear search field");
         this.waitForElementAndSetText(SEARCH_INPUT, searchLine, "Search Page: cannot find and type search text into Search input");
     }
 
@@ -43,9 +42,7 @@ public class SearchPageObject extends MainPageObject {
     }
 
     public void waitForEmptySearchResult(){
-        int searchResult = getAmountOfFoundedElements(SEARCH_RESULT_ELEMENTS);
-        Assert.assertTrue("Search Page: search result is not empty", searchResult == 0);
-        this.waitForElementPresenceBy(SEARCH_EMPTY_RESULT, "Search Page: cannot find No result label");
+        this.waitForElementInvisibilityBy(SEARCH_EMPTY_RESULT, "Search Page: search result is not empty");
     }
 
     public void waitForCancelBtnToAppear(){
