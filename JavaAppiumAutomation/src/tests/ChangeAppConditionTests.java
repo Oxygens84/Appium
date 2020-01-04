@@ -15,20 +15,21 @@ public class ChangeAppConditionTests extends CoreTestCase {
         if (Platform.getInstance().isMW()){
             return;
         }
+
         SearchPageObject.initSearchInput();
         SearchPageObject.typeSearchLine(SEARCH_TEXT_JAVA);
         SearchPageObject.waitForSearchResult(SEARCH_TEXT_JAVA_RESULT);
         SearchPageObject.clickArticleWithSubstring(SEARCH_TEXT_JAVA_RESULT);
 
-        String titleBeforeRotation = ArticlePageObject.getArticleTitle(SEARCH_TEXT_JAVA);
+        String titleBeforeRotation1 = ArticlePageObject.getArticleTitle(SEARCH_TEXT_JAVA);
         this.rotateScreenToLandscapeMode();
-        String titleAfterRotation = ArticlePageObject.getArticleTitle(SEARCH_TEXT_JAVA);
-        assertEquals("Article title changed after rotation to Landscape", titleBeforeRotation, titleAfterRotation);
+        String titleAfterRotation1 = ArticlePageObject.getArticleTitle(SEARCH_TEXT_JAVA);
+        assertEquals("Article title changed after rotation to Landscape", titleBeforeRotation1, titleAfterRotation1);
 
-        titleBeforeRotation = ArticlePageObject.getArticleTitle(SEARCH_TEXT_JAVA);
+        String titleBeforeRotation2 = ArticlePageObject.getArticleTitle(SEARCH_TEXT_JAVA);
         this.rotateScreenToPortraitMode();
-        titleAfterRotation = ArticlePageObject.getArticleTitle(SEARCH_TEXT_JAVA);
-        assertEquals("Article title changed after rotation to Portrait", titleBeforeRotation, titleAfterRotation);
+        String titleAfterRotation2 = ArticlePageObject.getArticleTitle(SEARCH_TEXT_JAVA);
+        assertEquals("Article title changed after rotation to Portrait", titleBeforeRotation2, titleAfterRotation2);
     }
 
     @Test
@@ -44,7 +45,8 @@ public class ChangeAppConditionTests extends CoreTestCase {
         String titleBefore = ArticlePageObject.getArticleTitle(SEARCH_TEXT_JAVA);
         this.runAppInBackground();
         String titleAfter = ArticlePageObject.getArticleTitle(SEARCH_TEXT_JAVA);
-        assertEquals("Article title changed after rotation to Portrait", titleBefore, titleAfter);
+        //Android: bug? after background it opens start page (not previous article)
+        assertEquals("Article title changed after send into background", titleBefore, titleAfter);
     }
 
 }

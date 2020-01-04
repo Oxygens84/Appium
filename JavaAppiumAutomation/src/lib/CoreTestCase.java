@@ -27,7 +27,7 @@ public class CoreTestCase extends TestCase {
             driver.manage().window().setSize(new Dimension(360, 640));
         }
 
-        this.rotateScreenToPortraitMode();
+        //this.rotateScreenToPortraitMode();
         this.skipWelcomePageForIOS();
         this.openWikiWebPageForMobileWeb();
 
@@ -42,7 +42,7 @@ public class CoreTestCase extends TestCase {
 
     @Override
     protected void tearDown() throws Exception {
-        this.rotateScreenToPortraitMode();
+        //this.rotateScreenToPortraitMode();
         driver.quit();
         super.tearDown();
     }
