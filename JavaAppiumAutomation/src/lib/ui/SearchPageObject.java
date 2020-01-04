@@ -1,6 +1,10 @@
 package lib.ui;
 
+import org.junit.Assert;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebDriver;
+
+import java.util.List;
 
 abstract public class SearchPageObject extends MainPageObject {
 
@@ -62,4 +66,30 @@ abstract public class SearchPageObject extends MainPageObject {
         this.waitForElementAndClick(searchResultXpath, "Search Page: cannot find and click Article for substring " + searchText);
     }
 
+    public int getAmountOfFoundedElements(){
+        return this.getAmountOfFoundedElements(SEARCH_RESULT_ELEMENTS);
+    }
+
+    public List<WebElement> getListFoundedElements(){
+        return this.getFoundedElements(SEARCH_RESULT_ELEMENTS);
+    }
+
+    public void checkTextInSearchResult(String searchText){
+        List<WebElement> result_elements = getListFoundedElements();
+        String error = "";
+
+        for (WebElement element: result_elements) {
+            if (!element
+                    .getText()
+                    .toUpperCase()
+                    .contains(searchText.toUpperCase())){
+                error += "\nFounded title '" + element.getText() + "' doesn't contain '" + searchText + "'";
+            }
+        }
+
+        Assert.assertTrue(
+                "Search Page: search result contains titles without search text \n" + error,
+                error.length() == 0
+        );
+    }
 }

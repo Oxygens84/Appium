@@ -11,6 +11,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -206,7 +207,7 @@ public class MainPageObject {
     public int getAmountOfFoundedElements(String locator){
         By by = this.getLocatorByString(locator);
         WebDriverWait wait = new WebDriverWait(driver, defaultTimeout);
-        wait.withMessage("Cannot find element for " + locator + " \n");
+        wait.withMessage("Cannot find elements for " + locator + " \n");
         try {
             wait.until(
                     ExpectedConditions.presenceOfElementLocated(by)
@@ -214,6 +215,20 @@ public class MainPageObject {
             return driver.findElements(by).size();
         } catch (Exception e) {
             return 0;
+        }
+    }
+
+    public List<WebElement> getFoundedElements(String locator){
+        By by = this.getLocatorByString(locator);
+        WebDriverWait wait = new WebDriverWait(driver, defaultTimeout);
+        wait.withMessage("Cannot find elements for " + locator + " \n");
+        try {
+            wait.until(
+                    ExpectedConditions.presenceOfElementLocated(by)
+            );
+            return driver.findElements(by);
+        } catch (Exception e) {
+            return Collections.emptyList();
         }
     }
 
