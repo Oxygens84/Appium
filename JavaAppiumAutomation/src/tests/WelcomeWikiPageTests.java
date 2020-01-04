@@ -1,4 +1,4 @@
-package tests.ios;
+package tests;
 
 import lib.CoreTestCase;
 import lib.Platform;
@@ -11,15 +11,14 @@ public class WelcomeWikiPageTests extends CoreTestCase {
     protected void setUp() throws Exception {
         super.setUp();
         driver = Platform.getInstance().getDriver();
-        this.rotateScreenToPortraitode();
+        this.rotateScreenToPortraitMode();
 
         WelcomePageObject = new WelcomePageObject(driver);
     }
 
     @Test
     public void testPassThroughWelcome(){
-
-        if (Platform.getInstance().isAndroid()) {
+        if (Platform.getInstance().isAndroid() || Platform.getInstance().isMW()) {
             return;
         }
         WelcomePageObject.waitForLearnMoreLink();

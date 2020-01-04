@@ -1,6 +1,6 @@
 package lib.ui;
 
-import io.appium.java_client.AppiumDriver;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 abstract public class SearchPageObject extends MainPageObject {
 
@@ -12,7 +12,7 @@ abstract public class SearchPageObject extends MainPageObject {
             SEARCH_CANCEL_BUTTON,
             SEARCH_EMPTY_RESULT;
 
-    public SearchPageObject(AppiumDriver driver) {
+    public SearchPageObject(RemoteWebDriver driver) {
         super(driver);
     }
 
@@ -24,7 +24,7 @@ abstract public class SearchPageObject extends MainPageObject {
 
     public void initSearchInput(){
         this.waitForElementAndClick(SEARCH_INIT_ELEMENT, "Search Page: cannot find and click Search init element");
-        this.waitForElementPresenceBy(SEARCH_INPUT, "Search Page: cannot find Search input after clicking on Search init element");
+        this.waitForElementPresence(SEARCH_INPUT, "Search Page: cannot find Search input after clicking on Search init element");
     }
 
     public void typeSearchLine(String searchLine){
@@ -33,12 +33,12 @@ abstract public class SearchPageObject extends MainPageObject {
     }
 
     public void waitForSearchResult(){
-        this.waitForElementPresenceBy(SEARCH_RESULT_ELEMENTS, "Search Page: cannot find Search result");
+        this.waitForElementPresence(SEARCH_RESULT_ELEMENTS, "Search Page: cannot find Search result");
     }
 
     public void waitForSearchResult(String searchText){
         String searchResultXpath = getResultSearchElement(searchText);
-        this.waitForElementPresenceBy(searchResultXpath, "Search Page: cannot find Search result for substring " + searchText);
+        this.waitForElementPresence(searchResultXpath, "Search Page: cannot find Search result for substring " + searchText);
     }
 
     public void waitForEmptySearchResult(){
@@ -46,7 +46,7 @@ abstract public class SearchPageObject extends MainPageObject {
     }
 
     public void waitForCancelBtnToAppear(){
-        this.waitForElementPresenceBy(SEARCH_CANCEL_BUTTON, "Search Page: cannot find cancel button");
+        this.waitForElementPresence(SEARCH_CANCEL_BUTTON, "Search Page: cannot find cancel button");
     }
 
     public void clickCancelSearch(){

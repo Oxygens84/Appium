@@ -1,8 +1,8 @@
 package lib.ui;
 
-import io.appium.java_client.AppiumDriver;
 import lib.Platform;
 import org.junit.Assert;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 abstract public class MyListPageObject extends MainPageObject {
 
@@ -13,17 +13,23 @@ abstract public class MyListPageObject extends MainPageObject {
             MY_LIST_FOLDER_TITLE,
             OK_BUTTON,
             SEARCH_ELEMENT_BY_SUBSTRING_TPL,
-            SEARCH_ELEMENTS;
+            SEARCH_ELEMENTS,
+            OPTIONS_ADD_TO_MY_LIST_BUTTON,
+            OPTIONS_REMOVE_FROM_MY_LIST_BUTTON,
+            REMOVE_FROM_SAVED_BUTTON;
 
-    public MyListPageObject(AppiumDriver driver) {
+    public MyListPageObject(RemoteWebDriver driver) {
         super(driver);
     }
 
-    /* TEMPLATES METHOD */
     private static String getResultSearchElement(String substring){
         return SEARCH_ELEMENT_BY_SUBSTRING_TPL.replace("{SUBSTRING}", substring);
     }
-    /* TEMPLATES METHOD */
+
+    public String getRemoveButtonByTitle(String title){
+        return REMOVE_FROM_SAVED_BUTTON.replace("{TITLE}", title);
+
+    }
 
     public void addArticleToNewList(String title){
         this.waitForElementAndClick(ACTIONS_OPTION, "My list Page: cannot find Options button for article");
@@ -45,23 +51,35 @@ abstract public class MyListPageObject extends MainPageObject {
     }
 
     public void clickFolderWithSubstring(String title){
-        String searchResultXpath = getResultSearchElement(title);
-        this.waitForElementAndClick(searchResultXpath, "My list Page: cannot find and click Folder for substring " + title);
+        if (Platform.getInstance().isAndroid()) {
+            String searchResultXpath = getResultSearchElement(title);
+            this.waitForElementAndClick(searchResultXpath, "My list Page: cannot find and click Folder for substring " + title);
+        }
     }
 
     public void removeArticleFromMyList(String title){
         this.waitArticleAppearInMyList(title);
         String searchResultXpath = getResultSearchElement(title);
-        this.swipeLeftforElement(searchResultXpath, "My list Page: cannot delete article from my list");
-        if (Platform.getInstance().isIOS()) {
+
+        if (Platform.getInstance().isAndroid()){
+            this.swipeLeftforElement(searchResultXpath, "My list Page: cannot delete article from my list");
+        }
+        if (Platform.getInstance().isIOS()){
+            this.swipeLeftforElement(searchResultXpath, "My list Page: cannot delete article from my list");
             this.clickElementToRightUpperConner(searchResultXpath, "My list Page: cannot delete article from my list");
         }
+        if (Platform.getInstance().isMW()){
+            String removeLocator = getRemoveButtonByTitle(title);
+            this.waitForElementAndClick(removeLocator, "My list Page: cannot find and click button to remove article from saved");
+            driver.navigate().refresh();
+        }
+
         this.waitArticleDisappearFromMyList(title);
     }
 
     public void waitArticleAppearInMyList(String title){
         String searchResultXpath = getResultSearchElement(title);
-        this.waitForElementPresenceBy(searchResultXpath, "My list Page: didn't appear article for substring " + title);
+        this.waitForElementPresence(searchResultXpath, "My list Page: didn't appear article for substring " + title);
     }
 
     public void waitArticleDisappearFromMyList(String title){
@@ -70,6 +88,7 @@ abstract public class MyListPageObject extends MainPageObject {
     }
 
     public void addArticleToMySavedArticles(){
+        this.waitForElementsPresenceBy(ADD_ARTICLE, "Article Page: cannot find button to save articke");
         this.waitForElementAndClick(ADD_ARTICLE, "Article Page: cannot add article to my saved articles");
     }
 
@@ -78,5 +97,20 @@ abstract public class MyListPageObject extends MainPageObject {
                 "My list Page: amount of elements invalid",
                 expectedSize,
                 this.getAmountOfFoundedElements(SEARCH_ELEMENTS));
+    }
+
+    public void removeArticleFromSavedIfItAdded(){
+        if (this.isElementPresence(OPTIONS_REMOVE_FROM_MY_LIST_BUTTON)){
+            this.waitForElementAndClick(OPTIONS_REMOVE_FROM_MY_LIST_BUTTON, "Article Page: cannot find button to remove article from saved");
+            this.waitForElementsPresenceBy(OPTIONS_ADD_TO_MY_LIST_BUTTON, "Article Page: cannot find button to save article after removing");
+        }
+    }
+
+    public void saveArticle(String folderTitle){
+        if (Platform.getInstance().isAndroid()){
+            addArticleToNewList(folderTitle);
+        } else {
+            addArticleToMySavedArticles();
+        }
     }
 }

@@ -1,6 +1,7 @@
-package tests.android;
+package tests;
 
 import lib.CoreTestCase;
+import lib.Platform;
 import org.junit.Test;
 
 public class ChangeAppConditionTests extends CoreTestCase {
@@ -11,6 +12,9 @@ public class ChangeAppConditionTests extends CoreTestCase {
 
     @Test
     public void testChangeScreenOrientationForSearch(){
+        if (Platform.getInstance().isMW()){
+            return;
+        }
         SearchPageObject.initSearchInput();
         SearchPageObject.typeSearchLine(SEARCH_TEXT_JAVA);
         SearchPageObject.waitForSearchResult(SEARCH_TEXT_JAVA_RESULT);
@@ -22,13 +26,16 @@ public class ChangeAppConditionTests extends CoreTestCase {
         assertEquals("Article title changed after rotation to Landscape", titleBeforeRotation, titleAfterRotation);
 
         titleBeforeRotation = ArticlePageObject.getArticleTitle(SEARCH_TEXT_JAVA);
-        this.rotateScreenToPortraitode();
+        this.rotateScreenToPortraitMode();
         titleAfterRotation = ArticlePageObject.getArticleTitle(SEARCH_TEXT_JAVA);
         assertEquals("Article title changed after rotation to Portrait", titleBeforeRotation, titleAfterRotation);
     }
 
     @Test
     public void testSendAppInBackgroundMode(){
+        if (Platform.getInstance().isMW()){
+            return;
+        }
         SearchPageObject.initSearchInput();
         SearchPageObject.typeSearchLine(SEARCH_TEXT_JAVA);
         SearchPageObject.waitForSearchResult(SEARCH_TEXT_JAVA_RESULT);

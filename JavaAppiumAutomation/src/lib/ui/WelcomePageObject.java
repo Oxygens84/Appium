@@ -1,6 +1,6 @@
 package lib.ui;
 
-import io.appium.java_client.AppiumDriver;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 public class WelcomePageObject extends MainPageObject {
 
@@ -14,24 +14,24 @@ public class WelcomePageObject extends MainPageObject {
             STEP_SKIP = "xpath://XCUIElementTypeButton[@name='Skip']";
 
 
-    public WelcomePageObject(AppiumDriver driver) {
+    public WelcomePageObject(RemoteWebDriver driver) {
         super(driver);
     }
 
     public void waitForLearnMoreLink(){
-        this.waitForElementPresenceBy(STEP_LEARN_MORE_ABOUT_WIKI, "Welcome Page: cannot find 'Learn more about Wikipedia'");
+        this.waitForElementPresence(STEP_LEARN_MORE_ABOUT_WIKI, "Welcome Page: cannot find 'Learn more about Wikipedia'");
     }
 
     public void waitForNewWayToExploreText(){
-        this.waitForElementPresenceBy(STEP_NEW_WAY_TO_EXPLORE, "Welcome Page: cannot find 'New ways to explore'");
+        this.waitForElementPresence(STEP_NEW_WAY_TO_EXPLORE, "Welcome Page: cannot find 'New ways to explore'");
     }
 
     public void waitForAddOrEditPreferredLangText(){
-        this.waitForElementPresenceBy(STEP_ADD_OR_EDIT_PREF_LANGUAGE, "Add or edit preferred lamguages'");
+        this.waitForElementPresence(STEP_ADD_OR_EDIT_PREF_LANGUAGE, "Add or edit preferred lamguages'");
     }
 
     public void waitForLearnMoreAboutDataCollectedText(){
-        this.waitForElementPresenceBy(STEP_LEARN_MORE_ABOUT_DATA_COLLECTED, "Learn more about data collected'");
+        this.waitForElementPresence(STEP_LEARN_MORE_ABOUT_DATA_COLLECTED, "Learn more about data collected'");
     }
 
 

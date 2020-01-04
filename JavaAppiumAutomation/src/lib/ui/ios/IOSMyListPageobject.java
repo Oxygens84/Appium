@@ -1,7 +1,7 @@
 package lib.ui.ios;
 
-import io.appium.java_client.AppiumDriver;
 import lib.ui.MyListPageObject;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 public class IOSMyListPageobject extends MyListPageObject {
 
@@ -11,7 +11,7 @@ public class IOSMyListPageobject extends MyListPageObject {
         SEARCH_ELEMENTS = "xpath://XCUIElementTypeCell";
     }
 
-    public IOSMyListPageobject(AppiumDriver driver) {
+    public IOSMyListPageobject(RemoteWebDriver driver) {
         super(driver);
     }
 

@@ -1,4 +1,4 @@
-package tests.android;
+package tests;
 
 import lib.CoreTestCase;
 import org.junit.Test;
@@ -7,7 +7,7 @@ public class SearchTests extends CoreTestCase {
 
     private static final String
             SEARCH_TEXT_JAVA = "Java (programming language)",
-            SEARCH_TEXT_JAVA_RESULT = "oriented programming language";
+            SEARCH_TEXT_JAVA_RESULT = "programming language";
 
     @Test
     public void testSearchPrompt(){
@@ -45,11 +45,10 @@ public class SearchTests extends CoreTestCase {
 
     @Test
     public void testSwipeUpSearchResult() {
-        String searchText = "Appium";
         SearchPageObject.initSearchInput();
-        SearchPageObject.typeSearchLine(searchText);
-        SearchPageObject.waitForSearchResult(searchText);
-        SearchPageObject.clickArticleWithSubstring(searchText);
+        SearchPageObject.typeSearchLine(SEARCH_TEXT_JAVA);
+        SearchPageObject.waitForSearchResult(SEARCH_TEXT_JAVA);
+        SearchPageObject.clickArticleWithSubstring(SEARCH_TEXT_JAVA);
         ArticlePageObject.swipeToFooter();
     }
 }
