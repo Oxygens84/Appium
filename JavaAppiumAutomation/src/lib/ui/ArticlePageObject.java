@@ -32,6 +32,14 @@ abstract public class ArticlePageObject extends MainPageObject {
         return this.waitForElementPresence(ARTICLE_TITLE, "Article Page: cannot find article's title");
     }
 
+    public WebElement waitForTitle(String byText){
+        if (Platform.getInstance().isMW()) {
+            return waitForArticleTitle();
+        } else {
+            return waitForArticleTitle(byText);
+        }
+    }
+
     public String getArticleTitle(String withText){
         WebElement titleElement;
         if (Platform.getInstance().isAndroid()){

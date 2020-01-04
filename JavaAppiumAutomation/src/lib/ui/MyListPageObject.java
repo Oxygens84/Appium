@@ -39,10 +39,10 @@ abstract public class MyListPageObject extends MainPageObject {
         this.waitForElementAndClick(OK_BUTTON, "My list page: cannot find and click OK button for folder creating");
     }
 
-    public void addArticleToExistingList(String title){
+    public void addArticleToExistingList(String folderTitle){
         this.waitForElementAndClick(ACTIONS_OPTION, "My list Page: cannot find Options button for article");
         this.waitForElementAndClick(ADD_ARTICLE, "My list Page: cannot find Option 'Add to reading list'");
-        this.clickFolderWithSubstring(title);
+        this.clickFolderWithSubstring(folderTitle);
     }
 
     public void setTitleForMyListFolder(String title){
@@ -109,6 +109,14 @@ abstract public class MyListPageObject extends MainPageObject {
     public void saveArticle(String folderTitle){
         if (Platform.getInstance().isAndroid()){
             addArticleToNewList(folderTitle);
+        } else {
+            addArticleToMySavedArticles();
+        }
+    }
+
+    public void saveArticleIntoExistingFolder(String folderTitle){
+        if (Platform.getInstance().isAndroid()){
+            addArticleToExistingList(folderTitle);
         } else {
             addArticleToMySavedArticles();
         }

@@ -1,6 +1,7 @@
 package tests;
 
 import lib.CoreTestCase;
+import lib.Platform;
 import org.junit.Test;
 
 public class MyListsTests extends CoreTestCase {
@@ -21,17 +22,19 @@ public class MyListsTests extends CoreTestCase {
 
         //TODO: clear/check SavedList before to start
 
-        NavigationUI.openMainMenu();
-        NavigationUI.goToAuth();
-        //Thread.sleep(2000);
-        AuthorizationPageObject.enterLoginAndPassword(LOGIN, PASSWORD);
-        AuthorizationPageObject.clickSubmitButton();
+        if (Platform.getInstance().isMW()) {
+            NavigationUI.openMainMenu();
+            NavigationUI.goToAuth();
+            //Thread.sleep(2000);
+            AuthorizationPageObject.enterLoginAndPassword(LOGIN, PASSWORD);
+            AuthorizationPageObject.clickSubmitButton();
+        }
 
         SearchPageObject.initSearchInput();
         SearchPageObject.typeSearchLine(searchText);
         SearchPageObject.waitForSearchResult(searchResultText);
         SearchPageObject.clickArticleWithSubstring(searchResultText);
-        ArticlePageObject.waitForArticleTitle();
+        ArticlePageObject.waitForTitle(searchResultText);
         MyListPageObject.saveArticle(folderTitle);
 
         NavigationUI.returnToSearch();
@@ -51,16 +54,19 @@ public class MyListsTests extends CoreTestCase {
         String searchText1 = SEARCH_TEXT_JAVA;
         String searchResultText1 = SEARCH_TEXT_JAVA_RESULT;
 
-        NavigationUI.openMainMenu();
-        NavigationUI.goToAuth();
-        AuthorizationPageObject.enterLoginAndPassword(LOGIN, PASSWORD);
-        AuthorizationPageObject.clickSubmitButton();
+        if (Platform.getInstance().isMW()) {
+            NavigationUI.openMainMenu();
+            NavigationUI.goToAuth();
+            //Thread.sleep(2000);
+            AuthorizationPageObject.enterLoginAndPassword(LOGIN, PASSWORD);
+            AuthorizationPageObject.clickSubmitButton();
+        }
 
         SearchPageObject.initSearchInput();
         SearchPageObject.typeSearchLine(searchText1);
         SearchPageObject.waitForSearchResult(searchResultText1);
         SearchPageObject.clickArticleWithSubstring(searchResultText1);
-        ArticlePageObject.waitForArticleTitle();
+        ArticlePageObject.waitForTitle(searchResultText1);
         MyListPageObject.saveArticle(folderTitle);
 
         NavigationUI.returnToSearch();
@@ -72,8 +78,8 @@ public class MyListsTests extends CoreTestCase {
         SearchPageObject.typeSearchLine(searchText2);
         SearchPageObject.waitForSearchResult(searchResultText2);
         SearchPageObject.clickArticleWithSubstring(searchResultText2);
-        ArticlePageObject.waitForArticleTitle();
-        MyListPageObject.saveArticle(folderTitle);
+        ArticlePageObject.waitForTitle(searchResultText2);
+        MyListPageObject.saveArticleIntoExistingFolder(folderTitle);
 
         NavigationUI.returnToSearch();
 

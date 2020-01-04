@@ -23,7 +23,9 @@ public class CoreTestCase extends TestCase {
     protected void setUp() throws Exception {
         super.setUp();
         driver = Platform.getInstance().getDriver();
-        driver.manage().window().setSize(new Dimension(360,640));
+        if (Platform.getInstance().isMW()) {
+            driver.manage().window().setSize(new Dimension(360, 640));
+        }
 
         this.rotateScreenToPortraitMode();
         this.skipWelcomePageForIOS();
